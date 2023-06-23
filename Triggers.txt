@@ -1,0 +1,30 @@
+Trigger 1:
+Before insert trigger
+Trigger to check if the age of a user if below 0 or not if it is less then 0 then set it as 0
+
+delimiter //
+create trigger age_verify
+before insert on best_buy.user
+for each row
+begin 
+if new.age < 0 then
+set new.age = 0;
+end if;
+end;
+
+Trigger 2:
+After insert trigger
+Trigger to set a reminder if the order delivery date is entered null for any order
+
+delimiter //
+
+create trigger null_order_delivery_date
+after insert
+on best_buy.order
+for each row
+begin
+if new.Order_delivery is null then 
+insert into reminders(memberId, message)
+values(new.Oid, concat('Hi ', new.memberId, ', please update order date.'));
+end if;
+end;

@@ -1,0 +1,23 @@
+Olap 1:
+Find average price of the clothes by grouping them according to their colour, size, and fabric type.
+
+SELECT colour, size, fabric_type, avg(price) as average_price FROM best_buy.clothing
+group by colour, size, fabric_type with rollup;
+
+Olap 2:
+Find the average age for people of diverse genders in retailer database.
+
+SELECT gender, avg(age) FROM best_buy.retailer
+group by gender with rollup;
+
+Olap 3:
+Find the minimum price of electrical appliances based on their reviews.
+
+SELECT reviews, min(price) FROM best_buy.electrical_appliances
+group by reviews with rollup;
+
+Olap 4:
+Find average discount offered on footwears based on their colour and size.
+
+SELECT colour, size, avg(discount) FROM best_buy.footwear
+group by colour, size with rollup;

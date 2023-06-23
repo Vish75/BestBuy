@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Best Buy</title>
+  <style>
+    /* Header styles */
+    header {
+      background-color: #0046be;
+      color: white;
+      padding: 20px;
+      text-align: center;
+      font-size: 30px;
+    }
+
+    /* Search bar styles */
+    form {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-top: 50px;
+    }
+
+    label {
+      font-size: 20px;
+      margin-right: 10px;
+    }
+
+    input[type="text"] {
+      padding: 10px;
+      font-size: 16px;
+    }
+
+    button[type="submit"] {
+      padding: 10px 20px;
+      background-color: #0046be;
+      color: white;
+      border: none;
+      font-size: 16px;
+      cursor: pointer;
+    }
+
+    button[type="submit"]:hover {
+      background-color: #00369c;
+    }
+
+    /* Result table styles */
+    table {
+      border-collapse: collapse;
+      margin-top: 50px;
+      margin-left: auto;
+      margin-right: auto;
+      font-size: 16px;
+    }
+
+    th, td {
+      border: 1px solid #ddd;
+      padding: 8px;
+      text-align: left;
+    }
+
+    th {
+      background-color: #0046be;
+      color: white;
+    }
+
+    tr:nth-child(even) {
+      background-color: #f2f2f2;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    Best Buy 
+  </header>
+
+  <form>
+    <label for="query">Enter your search query:</label>
+    <input type="text" name="query" id="query">
+    <button type="submit">Search</button>
+  </form>
+
+  <table id="result"></table>
+
+  <script>
+    const form = document.querySelector('form');
+    const input = document.querySelector('input');
+    const resultTable = document.querySelector('#result');
+    const baseUrl = 'http://localhost:8383';
+
+    form.addEventListener('submit', async (event) => {
+      event.preventDefault();
+
+      const query = input.value.trim();
+
+      const response = await fetch(`${baseUrl}/query?query=${encodeURIComponent(query)}`);
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      const result = await response.json();
+
+      // Generate table headers
+      const tableHeaders = Object.keys(result[0])
+        .map((key) => `<th>${key}</th>`)
+        .join('');
+
+      // Generate table rows
+      const tableRows = result
+        .map((row) => {
+          const rowData = Object.values(row)
+            .map((value) => `<td>${value}</td>`)
+            .join('');
+
+          return `<tr>${rowData}</tr>`;
+        })
+        .join('');
+
+      resultTable.innerHTML = `
+        <thead>
+          <tr>${tableHeaders}</tr>
+        </thead>
+        <tbody>
+          ${tableRows}
+        </tbody>
+      `;
+    });
+  </script>
+</body>
+</html>
